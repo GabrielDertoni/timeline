@@ -15,6 +15,7 @@ export default {
       margin: 10,
       lineColor: "#3f3f3f",
       timelinewidth: 10,
+      tickWidth: 5,
       timelineMarkerWidth: 15,
       tickSize: 20
     }
@@ -67,10 +68,10 @@ export default {
       const ticksX = timelineX + this.timelinewidth / 2;
       // Draw timeline ticks.
       for (let i = 0; i <= this.ticks; i++) {
-        context.lineWidth = this.timelinewidth / 2;
+        context.lineWidth = this.tickWidth;
         context.beginPath();
-        context.moveTo(ticksX, this.margin + (this.timelinewidth / 4) + this.tickSpacing * i);
-        context.lineTo(ticksX - this.tickSize, this.margin + (this.timelinewidth / 4) + this.tickSpacing * i);
+        context.moveTo(ticksX, this.margin + this.tickSpacing * i);
+        context.lineTo(ticksX - this.tickSize, this.margin + this.tickSpacing * i);
         context.stroke();
       }
 
@@ -84,9 +85,17 @@ export default {
             const length = note.length + note.posY;
             this.drawRect(
               context,
-              timelineX + this.timelinewidth / 2, this.margin,
-              this.timelineMarkerWidth * (i + 1), length,
+              timelineX + this.timelinewidth / 2, this.margin - Math.ceil(this.tickWidth / 2),
+              this.timelineMarkerWidth * (i + 1), length + Math.ceil(this.tickWidth / 2),
               0, 0, 10, 0
+            );
+          } else if (note.posY + note.length > this.height) {
+            const length = this.height - note.posY;
+            this.drawRect(
+              context,
+              timelineX + this.timelinewidth / 2, this.margin + note.posY,
+              this.timelineMarkerWidth * (i + 1), length + Math.ceil(this.tickWidth / 2),
+              0, 10, 0, 0
             );
           } else {
             this.drawRect(

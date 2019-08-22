@@ -51,7 +51,8 @@ export default {
         const element = doc.data();
         element.id = doc.id;
         element.posY = this.timelineHeight * (element.date - this.startTime) / (this.endTime - this.startTime);
-        element.height = 100;
+        const nlines = element.description.split('\n').length;
+        element.height = 60 + 19 * nlines;
         element.length = this.timelineHeight * element.duration / (this.endTime - this.startTime);
         data.push(element);
       }).bind(this));
