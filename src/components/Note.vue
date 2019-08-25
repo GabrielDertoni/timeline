@@ -2,9 +2,6 @@
   <div class="note" :style="posStyle" @click="click">
     <div :style="bacgroundColor" class="inner-container">
       <h2 :style="titleColor">{{ title }}</h2>
-      <div class="description">
-        <p v-for="(line, index) in description.split('\n')" :key="index">{{ line }}</p>
-      </div>
     </div>
   </div>
 </template>
@@ -60,7 +57,7 @@ export default {
   },
   methods: {
     click() {
-      this.$router.push(`note-form/${this.id}`)
+      this.$router.push(`note-view/${this.id}`);
     }
   }
 }
@@ -77,34 +74,14 @@ export default {
       border-radius: 5px;
       margin: 0 0.1em;
       height: 100%;
-      display: grid;
-      grid-template-rows: [start] 3em [after-title] 1fr [end];
-      grid-template-columns: [start-col] 100% [end-col];
-      grid-template-areas: 
-        "title"
-        "description";
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: center;
+      align-items: center;
 
       h2 {
-        // grid-area: title;
-        grid-row: start / after-title;
-        grid-column: start-col / end-col;
         padding: 0.3em;
         margin: 0;
-      }
-      .description {
-        grid-row: after-title / end;
-        grid-column: start-col / end-col;
-        // grid-area: description;
-        margin-top: 0;
-        text-align: left;
-        padding: 0 1em;
-        display: flex;
-        flex-flow: column wrap;
-        max-height: 90%;
-
-        p {
-          margin: 0;
-        }
       }
     }
   }

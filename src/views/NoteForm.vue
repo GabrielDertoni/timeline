@@ -1,13 +1,13 @@
 <template>
   <div class="note-form">
     <div class="header">
-      <router-link class="back" to="/">
+      <router-link class="back" :to="$route.params.id ? `/note-view/${$route.params.id}` : '/'">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M16.67 0l2.83 2.829-9.339 9.175 9.339 9.167-2.83 2.829-12.17-11.996z"/></svg>
       </router-link>
       <h1>{{ id ? 'Edit Event' : 'Add Event' }}</h1>
     </div>
     <Loading v-if="loading"></Loading>
-    <form v-else @submit.prevent="submit" @mousedown.stop>
+    <form v-else @submit.prevent="submit">
       <input type="text" name="title" v-model="title" placeholder="Event title" required>
       <div class="container">
         <input type="number" step="1" name="start-date" v-model="startDate" placeholder="Start date" required>
@@ -206,6 +206,7 @@ export default {
       border-radius: 5px;
       padding: 0.5em 0.3em;
       border: solid rgb(161, 161, 161) 1px;
+      font-family: 'Roboto', sans-serif;
 
       &::placeholder {
         font-family: 'Roboto', sans-serif;
