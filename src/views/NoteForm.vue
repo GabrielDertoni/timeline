@@ -4,6 +4,11 @@
       <router-link class="back" :to="$route.params.id ? `/note-view/${$route.params.id}` : '/'">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M16.67 0l2.83 2.829-9.339 9.175 9.339 9.167-2.83 2.829-12.17-11.996z"/></svg>
       </router-link>
+      <div v-if="$route.params.id ? true : false" class="delete" @click="deleteNote">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <path d="M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z"/>
+        </svg>
+      </div>
       <h1>{{ id ? 'Edit Event' : 'Add Event' }}</h1>
     </div>
     <Loading v-if="loading"></Loading>
@@ -50,15 +55,20 @@ export default {
   },
   created() {
     if (this.id) {
-      this.$root.database.collection('notes').doc(this.id).get().then((snapshot => {
-        const data = snapshot.data();
-        this.title = data.title;
-        this.startDate = data.date;
-        this.endDate = parseInt(data.date) + parseInt(data.duration);
-        this.description = data.description;
-        this.selectedColor = data.color;
+      const t = (new Date()).getTime();
+      this.$store.dispatch('select-event', this.id).then(() => {
+        const event = this.$store.state.currentEvent;
         this.loading = false;
-      }).bind(this));
+        this.startDate = event.startDate;
+        this.endDate = event.endDate;
+        this.title = event.title;
+        this.description = event.description;
+        this.selectedColor = event.color;
+      });
+      // const t = (new Date()).getTime();
+      // this.$store.dispatch('currentEvent/fetch', this.id).then(() => {
+      //   console.log(`Time: ${(new Date()).getTime() - t}`);
+      // })
     }
   },
   methods: {
@@ -72,16 +82,20 @@ export default {
       if (this.endDate) note.duration = parseInt(this.endDate) - parseInt(this.startDate);
       if (this.id) {
         this.loading = true;
-        this.$root.database.collection('notes').doc(this.id).update(note).then(ref => {
-          // this.$emit('submit');
-          this.$router.push({ name: "home" });
-        });
+        this.$store.dispatch('update-event', { id: this.id, note })
+          .then(() => {
+            this.$router.push({ name: "home" });
+          });
       } else {
-        this.$root.database.collection('notes').add(note).then(ref => {
-          // this.$emit('submit');
-          this.$router.push({ name: "home" });
-        });
+        this.$store.dispatch('create-event', note)
+          .then(() => {
+            this.$router.push({ name: "home" })
+          })
       }
+    },
+    deleteNote() {
+      const del = confirm("Are you sure you want to delete this note?");
+      if (del) this.$store.dispatch("delete-event", this.id).then(() => { this.$router.push({ name: "home" }) });
     }
   }
 }
@@ -100,6 +114,12 @@ export default {
     .back {
       position: absolute;
       left: 0;
+      margin: 1em;
+      cursor: pointer;
+    }
+    .delete {
+      position: absolute;
+      right: 0;
       margin: 1em;
       cursor: pointer;
     }

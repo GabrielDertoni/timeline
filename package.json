@@ -10,11 +10,13 @@
   "dependencies": {
     "core-js": "^2.6.5",
     "firebase": "^6.4.0",
+    "lodash": "^4.17.15",
     "node-sass": "^4.12.0",
     "sass": "^1.22.9",
     "sass-loader": "^7.2.0",
     "vue": "^2.6.10",
-    "vue-router": "^3.0.3"
+    "vue-router": "^3.0.3",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.10.0",
@@ -23,6 +25,7 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "vue-cli-plugin-store": "0.0.7",
     "vue-template-compiler": "^2.6.10"
   },
   "eslintConfig": {

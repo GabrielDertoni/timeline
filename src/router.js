@@ -5,7 +5,7 @@ import Home from './views/Home.vue'
 import NoteForm from './views/NoteForm.vue';
 import NoteView from './views/NoteView.vue';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
@@ -20,7 +20,7 @@ export default new Router({
       component: NoteForm
     },
     {
-      path: '/note-view/:id?',
+      path: '/note-view/:id',
       name: 'view-note',
       component: NoteView
     }

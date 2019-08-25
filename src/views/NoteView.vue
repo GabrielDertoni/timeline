@@ -32,6 +32,8 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex';
+
 import Loading from '../components/Loading.vue';
 
 export default {
@@ -41,14 +43,11 @@ export default {
   },
   data() {
     return {
-      id: this.$route.params.id,
-      loading: this.$route.params.id ? true : false,
-      startDate: "",
-      endDate: "",
-      title: "",
-      description: "",
-      color: ""
+      id: this.$route.params.id
     }
+  },
+  created() {
+    this.$store.dispatch('select-event', this.id);
   },
   computed: {
     colors() {
@@ -125,20 +124,15 @@ export default {
       return {
         'color': 'white'
       }
-    }
-  },
-  created() {
-    if (this.id) {
-      this.$root.database.collection('notes').doc(this.id).get().then((snapshot => {
-        const data = snapshot.data();
-        this.title = data.title;
-        this.startDate = data.date;
-        this.endDate = parseInt(data.date) + parseInt(data.duration);
-        this.description = data.description;
-        this.color = data.color;
-        this.loading = false;
-      }).bind(this));
-    }
+    },
+    ...mapState('currentEvent', {
+      startDate: 'startDate',
+      endDate: 'endDate',
+      title: 'title',
+      description: 'description',
+      color: 'color',
+      loading: 'loading'
+    })
   },
   methods: {
   }

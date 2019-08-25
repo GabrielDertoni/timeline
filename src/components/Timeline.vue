@@ -2,10 +2,11 @@
   <canvas></canvas>
 </template>
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: "Timeline",
   props: {
-    height: Number,
     ticks: Number,
     columns: Array
   },
@@ -26,12 +27,20 @@ export default {
       handler() {
         this.drawTimeline();
       }
+    },
+    ticks: {
+      handler() {
+        this.drawTimeline();
+      }
     }
   },
   computed: {
     tickSpacing() {
       return this.height / this.ticks;
-    }
+    },
+    ...mapState({
+      height: 'timelineHeight'
+    })
   },
   mounted() {
     this.width = this.timelineMarkerWidth * this.columns.length + 30;
@@ -108,19 +117,6 @@ export default {
         }
       }
     },
-    // drawRect(context, rectX, rectY, rectWidth, rectHeight, cornerRadius) {
-    //   context.lineWidth = cornerRadius;
-    //   context.lineJoin = "round";
-    //   context.strokeRect(rectX+(cornerRadius/2), rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
-    //   context.beginPath();
-    //   context.moveTo(rectX, rectY+(cornerRadius/2));
-    //   context.lineTo(rectX+(cornerRadius/2) + rectWidth-cornerRadius, rectY+(cornerRadius/2));
-    //   context.lineTo(rectX+(cornerRadius/2) + rectWidth-cornerRadius, rectY+(cornerRadius/2) + rectHeight-cornerRadius);
-    //   context.lineTo(rectX, rectY+(cornerRadius/2) + rectHeight-cornerRadius);
-    //   context.stroke();
-
-    //   context.fillRect(rectX, rectY+(cornerRadius/2), rectWidth-(cornerRadius/2), rectHeight-cornerRadius);
-    // }
     drawRect(context, rectX, rectY, rectWidth, rectHeight, topLeftCornerRadius, topRightCornerRadius, bottomRightCornerRadius, bottomLeftCornerRadius) {
       if (
         topLeftCornerRadius === undefined &&

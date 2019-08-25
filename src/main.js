@@ -1,31 +1,13 @@
 import Vue from 'vue'
 import App from './App.vue'
-import firebase from 'firebase/app';
-import 'firebase/firestore';
 import router from './router'
+import store from './store'
 
 Vue.config.productionTip = false
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDwq07XFXcu5Dy95DR_UTss5x9NEA6s7dc",
-  authDomain: "timeline-c6d6c.firebaseapp.com",
-  databaseURL: "https://timeline-c6d6c.firebaseio.com",
-  projectId: "timeline-c6d6c",
-  storageBucket: "",
-  messagingSenderId: "488249470038",
-  appId: "1:488249470038:web:4dc89a2b8c81d4c3"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-// Initialize cloud firestore through firebase
-const db = firebase.firestore();
 
 new Vue({
   render: h => h(App),
   data: {
-    database: db,
     colors: {
       "pink": {
         name: "Pink",
@@ -84,7 +66,11 @@ new Vue({
       }
     }
   },
+  created() {
+    this.$store.dispatch('fetch');
+  },
   router,
+  store,
   methods: {
     getColor(title, dark=false) {
       const color = this.colors[title.toLowerCase()]
